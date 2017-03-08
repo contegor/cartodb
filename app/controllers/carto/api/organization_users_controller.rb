@@ -121,6 +121,7 @@ module Carto
           render_jsonp "Can't delete @user. #{'Has shared entities' if @user.has_shared_entities?}", 410
         end
 
+        @user.force_delete if destroy_params[:force].present? and destroy_params[:force]
         @user.destroy
         @user.delete_in_central
 
@@ -156,6 +157,11 @@ module Carto
       # TODO: Use native strong params when in Rails 4+
       def update_params
         @update_params ||= permit(COMMON_MUTABLE_ATTRIBUTES)
+      end
+
+      # TODO: Use native strong params when in Rails 4+
+      def destroy_params
+        @destroy_params ||= permit(:force)
       end
     end
   end
